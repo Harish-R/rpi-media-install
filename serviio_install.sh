@@ -1,48 +1,40 @@
 # INSTALLING Serviio on Ubuntu
+# Install Java
+sudo add-apt-repository -y ppa:webupd8team/java
+sudo apt-get update
+sudo apt-get install -y oracle-java8-installer
 
 # Install dependencies
-sudo apt-get -y install ffmpeg
+sudo add-apt-repository -y ppa:kirillshkrogalev/ffmpeg-next
+sudo apt-get update
+sudo apt-get install -y ffmpeg
 sudo apt-get -y install dcraw
 sudo apt-get -y install libavcodec-extra-53 
 sudo apt-get -y install libavformat-extra-53
 
-# Install Java
-sudo add-apt-repository -y ppa:webupd8team/java
-sudo apt-get -y update
-sudo apt-get -y install oracle-java8-installer
-
-# Download Serviio-1.5.2 and Install
-sudo su
-cd /opt
+# Serviio Media Server
 wget http://download.serviio.org/releases/serviio-1.5.2-linux.tar.gz
 tar zxvf serviio-1.5.2-linux.tar.gz
 rm serviio-1.5.2-linux.tar.gz
-ln -s serviio-1.5.2 serviio
-chown -R root:root serviio-1.5.2
-cd serviio-1.5.2
-mkdir log
-chown -R $USER:$USER library log
+sudo mv serviio-1.5.2 /usr/local/share/serviio-1.5.2
+chown -R $USER:$USER /usr/local/share/serviio-1.5.2
 
-#Configure serviio service
+# Autostart on startup
 sudo touch /lib/systemd/system/serviio.service
-sudo echo "[Unit]
+sudo echo “[Unit]
 Description=Serviio Media Server
-After=syslog.target local-fs.target network.target
+After=syslog.target network.target
 
 [Service]
 Type=simple
-User=serviio
-Group=serviio
-ExecStart=/opt/serviio/bin/serviio.sh
-ExecStop=/opt/serviio/bin/serviio.sh -stop
+User=$USER
+ExecStart=/usr/local/share/serviio-1.5.2/bin/serviio.sh
 KillMode=none
 Restart=on-abort
 
 [Install]
-WantedBy=multi-user.target
-" > /lib/systemd/system/serviio.service
+WantedBy=multi-user.target” > /lib/systemd/system/serviio.service
 
-# Enable service at system startup
-sudo systemctl daemon-reload
-sudo systemctl enable serviio
-sudo systemctl start serviio
+systemctl daemon-reload
+systemctl enable serviio
+systemctl start serviio
