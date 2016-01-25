@@ -1,3 +1,9 @@
+<h3>Resize partition</h3>
+<code> $ sudo fdisk /dev/mmcblk0p2 </code><br>
+Delete the partition by entering <strong>d</strong> and then <strong>2</strong><bR>
+Create again by entering <strong>n</strong>, <strong>2</strong>, <strong>ENTER</strong>, <strong>ENTER</strong>, <strong>w</strong> <bR>
+<code> $ sudo resize2fs /dev/mmcblk0p2 </code><br>
+
 <h3>Remove Unwanted softwares</h3>
 <code>$ sudo apt-get purge -y sonic-pi minecraft-pi scratch idle idle3 brasero libreoffice-calc libreoffice-math libreoffice-impress libreoffice-draw</code><br>
 <code>$ sudo apt-get autoremote</code><br>
